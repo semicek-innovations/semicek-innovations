@@ -1,0 +1,25 @@
+{
+  "name": "@semicek-innovations/auth",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@casl/ability": "^6.7.1",
+    "tsup": "^8.4.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@semicek-innovations/eslint-config": "workspace:*",
+    "@semicek-innovations/tsconfig": "workspace:*"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@semicek-innovations/eslint-config/library"
+    ]
+  }
+}

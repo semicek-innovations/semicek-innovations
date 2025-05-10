@@ -1,0 +1,6 @@
+{
+  "extends": "@semicek-innovations/tsconfig/library.json",
+  "include": [
+    "index.ts"
+  ]
+}
