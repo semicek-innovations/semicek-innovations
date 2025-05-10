@@ -1,5 +1,6 @@
 import './globals.css'
 
+import { Analytics } from '@vercel/analytics/next'
 import { Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${geistSans.variable} ${geistMono.variable} overflow-auto scroll-smooth antialiased scrollbar-thumb-active-primary/75 scrollbar-thumb-foreground/50 scrollbar-thumb-hover-foreground/75 scrollbar-track-background`}
       >
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   )
