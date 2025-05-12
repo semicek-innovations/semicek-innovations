@@ -2,7 +2,7 @@ import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiBody } from '@nestjs/swagger'
 import { FastifyRequest } from 'fastify'
 
-import { Public } from '@/decorators/is-public'
+import { Public } from '@/common/decorators/is-public.decorator'
 
 import { AuthService } from './auth.service'
 import { LoginDto } from './dtos/login.dto'

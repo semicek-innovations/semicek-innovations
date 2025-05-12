@@ -3,10 +3,10 @@ import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
+import { AttachHeadersInterceptor } from './common/interceptors/attach-headers.interceptor'
+import { ZodValidationPipe } from './common/pipes/zod-validation.pipe'
 import { CORS_ORIGINS, ENV, PORT } from './config/app'
-// import { AttachHeadersInterceptor } from './interceptors/attach-headers.interceptor'
 import { AppModule } from './modules/app.module'
-import { ZodValidationPipe } from './pipes/zod-validation.pipe'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter())
@@ -16,7 +16,7 @@ async function bootstrap() {
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
   })
-  // app.useGlobalInterceptors(new AttachHeadersInterceptor())
+  app.useGlobalInterceptors(new AttachHeadersInterceptor())
   app.useGlobalPipes(new ZodValidationPipe())
 
   const config = new DocumentBuilder()

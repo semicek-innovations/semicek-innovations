@@ -2,8 +2,8 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/
 import { ApiBearerAuth } from '@nestjs/swagger'
 import { FastifyRequest } from 'fastify'
 
-import { casl } from '@/decorators/casl'
-import { Public } from '@/decorators/is-public'
+import { casl } from '@/common/decorators/casl.decorator'
+import { Public } from '@/common/decorators/is-public.decorator'
 
 import { RegisterDto } from './dtos/register.dto'
 import { UpdateDto } from './dtos/update.dto'

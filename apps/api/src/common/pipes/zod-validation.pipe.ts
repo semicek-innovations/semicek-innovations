@@ -2,7 +2,7 @@ import { ArgumentMetadata, PipeTransform } from '@nestjs/common'
 import { IncomingHttpHeaders } from 'http'
 import { ZodSchema } from 'zod'
 
-import { validate } from '@/lib/zod/create-zod-dto'
+import { validate } from '@/common/zod/create-zod-dto'
 
 export class ZodValidationPipe implements PipeTransform {
   // Optionally, a schema can be passed in the constructor.

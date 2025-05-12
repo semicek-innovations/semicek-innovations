@@ -1,15 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common'
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import * as bcrypt from 'bcryptjs'
 
-import { deleteUser, getNextUserId, getUser, getUsers, saveUser } from '@/db/users'
-
+import { PrismaService } from '../prisma/prisma.service'
 import { RegisterDto } from './dtos/register.dto'
 import { UpdateDto } from './dtos/update.dto'
 
 @Injectable()
 export class UsersService {
+  constructor(private prismaService: PrismaService) {}
+
   async validateUser(username: string, password: string) {
-    const user = await getUser('username', username, false)
+    const user = await this.prismaService.user.findUnique({ where: { username } })
     if (!user) return undefined
 
     const match = await bcrypt.compare(password, user.password)
@@ -21,69 +22,71 @@ export class UsersService {
   }
 
   async findAll() {
-    const users = await getUsers()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return users.map(({ password, ...user }) => user)
+    const users = await this.prismaService.user.findMany({ omit: { password: true } })
+    return users
   }
 
   async findOne(id: string) {
-    const user = await getUser('id', id)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user
-    return userWithoutPassword
+    const user = await this.prismaService.user.findUnique({ where: { id }, omit: { password: true } })
+    return user
   }
 
   async register(body: RegisterDto) {
-    const existingUser = await getUser('username', body.username, false)
+    const existingUser = await this.prismaService.user.findUnique({
+      where: { username: body.username }
+    })
     if (existingUser) {
       throw new ConflictException({ errors: { username: ['Username already exists'] } })
     }
 
     const hashedPassword = await bcrypt.hash(body.password, 10)
 
-    const newUser = await saveUser({
-      id: await getNextUserId(),
-      username: body.username,
-      role: body.role,
-      subscriptionPlan: 'FREE',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      email: '',
-      isActive: true,
-      name: '',
-      password: hashedPassword
+    return await this.prismaService.user.create({
+      data: {
+        username: body.username,
+        password: hashedPassword,
+        role: body.role,
+        subscriptionPlan: 'FREE',
+        email: '',
+        isActive: true,
+        name: ''
+      },
+      omit: { password: true }
     })
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = newUser
-    return userWithoutPassword
   }
 
   async update(id: string, body: UpdateDto) {
-    const user = await getUser('id', id)
+    const user = await this.prismaService.user.findUnique({ where: { id } })
+    if (!user) throw new NotFoundException('User not found')
 
     if (body.password) {
-      const hashedPassword = await bcrypt.hash(body.password, 10)
-      body.password = hashedPassword
+      body.password = await bcrypt.hash(body.password, 10)
     }
 
     if (body.username) {
-      const existingUser = await getUser('username', body.username, false)
+      const existingUser = await this.prismaService.user.findUnique({
+        where: { username: body.username }
+      })
+
       if (existingUser && existingUser.id !== id) {
-        throw new ConflictException({ errors: { username: ['Username already exists'] } })
+        throw new ConflictException({
+          errors: { username: ['Username already exists'] }
+        })
       }
     }
 
-    Object.assign(user, body)
-    await saveUser(user)
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user
-    return userWithoutPassword
+    return await this.prismaService.user.update({
+      where: { id },
+      data: body,
+      omit: { password: true }
+    })
   }
 
   async remove(id: string) {
-    await deleteUser(id)
+    const user = await this.prismaService.user.findUnique({ where: { id } })
+    if (!user) throw new NotFoundException('User not found')
+
+    await this.prismaService.user.delete({ where: { id } })
     return { message: 'User deleted' }
   }
 }
