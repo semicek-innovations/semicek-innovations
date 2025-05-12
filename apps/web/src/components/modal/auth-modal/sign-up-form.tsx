@@ -15,7 +15,7 @@ import { useForm } from '@/hooks/use-form'
 export function SignUpForm({ children, onSuccess }: { children: React.ReactNode; onSuccess?: () => void }) {
   const { signUp } = useUser()
   const { multiLangText } = useLanguage()
-  const form = useForm<RegisterPayload>({ resolver: zodResolver(registerSchema), defaultValues: { role: 'MEMBER' } })
+  const form = useForm<RegisterPayload>({ resolver: zodResolver(registerSchema), defaultValues: { role: 'USER' } })
 
   async function onSubmit(payload: RegisterPayload) {
     const response = await signUp(payload)

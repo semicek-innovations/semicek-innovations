@@ -13,7 +13,7 @@ export const permissions: Record<Role | 'ANONYMOUS', PermissionsByRole> = {
   ADMIN(_, { can }) {
     can('manage', 'all')
   },
-  MEMBER(user, { can }) {
+  USER(user, { can }) {
     can('get', 'User')
     can(['update', 'delete'], 'User', { id: { $eq: user.id } })
   },

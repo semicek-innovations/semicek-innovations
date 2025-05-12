@@ -1,6 +1,6 @@
-import { User } from '@semicek-innovations/shared-schemas'
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { User } from '@semicek-innovations/shared-schemas'
 
 import { UsersService } from '../users/users.service'
 import { JwtPayload } from './jwt.strategy'

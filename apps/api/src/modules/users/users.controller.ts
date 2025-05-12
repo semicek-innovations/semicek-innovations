@@ -21,7 +21,7 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param() { id }: { id: string }) {
-    return this.usersService.findOne(+id)
+    return this.usersService.findOne(id)
   }
 
   @Post('register')
@@ -34,19 +34,19 @@ export class UsersController {
   updateUser(@Req() req: FastifyRequest, @Param() { id }: { id: string }, @Body() body: UpdateDto) {
     casl(req, {
       action: 'update',
-      subject: { __typename: 'User', id: +id, role: 'MEMBER' },
+      subject: { __typename: 'User', id, role: 'USER', subscriptionPlan: 'FREE' },
       message: 'You are not authorized to update this user'
     })
-    return this.usersService.update(+id, body)
+    return this.usersService.update(id, body)
   }
 
   @Delete(':id')
   deleteUser(@Req() req: FastifyRequest, @Param() { id }: { id: string }) {
     casl(req, {
       action: 'delete',
-      subject: { __typename: 'User', id: +id, role: 'MEMBER' },
+      subject: { __typename: 'User', id, role: 'USER', subscriptionPlan: 'FREE' },
       message: 'You are not authorized to delete this user'
     })
-    return this.usersService.remove(+id)
+    return this.usersService.remove(id)
   }
 }

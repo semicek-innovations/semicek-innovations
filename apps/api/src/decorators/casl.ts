@@ -1,5 +1,5 @@
-import { AppAbility, getUserPermissions } from '@semicek-innovations/auth'
 import { SetMetadata, UnauthorizedException } from '@nestjs/common'
+import { AppAbility, getUserPermissions } from '@semicek-innovations/auth'
 import { FastifyRequest } from 'fastify'
 
 export interface RequiredRule {

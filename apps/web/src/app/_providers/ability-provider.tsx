@@ -10,7 +10,7 @@ export const useAbility = () => useContext(AbilityContext)
 
 export function AbilityProvider({ children }: { children: React.ReactNode }) {
   const { user } = useUser()
-  const ability = getUserPermissions(user?.id ?? 0, user?.role ?? 'ANONYMOUS')
+  const ability = getUserPermissions(user?.id ?? '', user?.role, user?.subscriptionPlan)
 
   return <AbilityContext.Provider value={ability}>{children}</AbilityContext.Provider>
 }

@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id               String           @id @default(uuid())
+  email            String           @unique
+  password         String
+  name             String
+  username         String           @unique
+  birthdate        DateTime?
+  avatarUrl        String? // S3 profile picture
+  preferences      Json? // visibility, notifications, etc.
+  role             Role             @default(USER)
+  subscriptionPlan SubscriptionPlan @default(FREE)
+  subscriptionEnds DateTime? // for trial/expiry checks
+  isActive         Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  PREMIUM
+}

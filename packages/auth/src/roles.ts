@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const roles = ['ADMIN', 'MEMBER'] as const
+export const roles = ['ADMIN', 'USER'] as const
 
 export const roleSchema = z.enum(roles, {
   message: `Role must be one of: ${roles.join(', ')}`

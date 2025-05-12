@@ -1,5 +1,5 @@
-import { UserWithPassword } from '@semicek-innovations/shared-schemas'
 import { NotFoundException } from '@nestjs/common'
+import { UserWithPassword } from '@semicek-innovations/shared-schemas'
 import { promises as fs } from 'fs'
 import * as path from 'path'
 
@@ -38,10 +38,10 @@ export async function getUser<T extends keyof UserWithPassword, E extends boolea
 
 export async function getNextUserId() {
   const users = await getUsers()
-  return users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1
+  return String(users.length > 0 ? Math.max(...users.map(u => +u.id)) + 1 : 1)
 }
 
-export async function deleteUser(id: number) {
+export async function deleteUser(id: string) {
   const users = await getUsers()
   const userIndex = users.findIndex(u => u.id === id)
   if (userIndex === -1) throw new NotFoundException('User not found')

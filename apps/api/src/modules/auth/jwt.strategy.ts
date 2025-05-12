@@ -5,7 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { getUser } from '@/db/users'
 
 export interface JwtPayload {
-  id: number
+  id: string
   username: string
 }
 

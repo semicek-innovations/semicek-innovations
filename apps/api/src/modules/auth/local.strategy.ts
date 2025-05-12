@@ -1,7 +1,7 @@
-import { multiLangText } from '@semicek-innovations/i18n'
-import { INVALID_CREDENTIALS, User, validationsMessages } from '@semicek-innovations/shared-schemas'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
+import { multiLangText } from '@semicek-innovations/i18n'
+import { INVALID_CREDENTIALS, User, validationsMessages } from '@semicek-innovations/shared-schemas'
 import { FastifyRequest } from 'fastify'
 import { Strategy } from 'passport-local'
 

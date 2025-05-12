@@ -1,6 +1,6 @@
+import { BadRequestException } from '@nestjs/common'
 import { Language, multiLangText } from '@semicek-innovations/i18n'
 import { validationsMessages } from '@semicek-innovations/shared-schemas'
-import { BadRequestException } from '@nestjs/common'
 import { ZodType } from 'zod'
 
 export function validate<T extends ZodType<any, any>>(schema: T, data: any, lang?: Language): T['_output'] {

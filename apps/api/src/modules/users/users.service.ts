@@ -26,7 +26,7 @@ export class UsersService {
     return users.map(({ password, ...user }) => user)
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const user = await getUser('id', id)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userWithoutPassword } = user
@@ -45,6 +45,12 @@ export class UsersService {
       id: await getNextUserId(),
       username: body.username,
       role: body.role,
+      subscriptionPlan: 'FREE',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      email: '',
+      isActive: true,
+      name: '',
       password: hashedPassword
     })
 
@@ -53,7 +59,7 @@ export class UsersService {
     return userWithoutPassword
   }
 
-  async update(id: number, body: UpdateDto) {
+  async update(id: string, body: UpdateDto) {
     const user = await getUser('id', id)
 
     if (body.password) {
@@ -76,7 +82,7 @@ export class UsersService {
     return userWithoutPassword
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     await deleteUser(id)
     return { message: 'User deleted' }
   }
