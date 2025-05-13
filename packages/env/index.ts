@@ -4,6 +4,7 @@ const server = z.object({
   PORT: z.coerce.number().default(3333),
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   CORS_ORIGINS: z.string().default('*'),
+  SECRET_KEY: z.string().default('SECRET_KEY'),
   DATABASE_URL: z.string().default(''),
   DIRECT_URL: z.string().default('')
 })
@@ -16,6 +17,7 @@ const processEnv = {
   PORT: process.env.PORT,
   NODE_ENV: process.env.NODE_ENV,
   CORS_ORIGINS: process.env.CORS_ORIGINS,
+  SECRET_KEY: process.env.SECRET_KEY,
   DATABASE_URL: process.env.DATABASE_URL,
   DIRECT_URL: process.env.DIRECT_URL,
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL

@@ -1,13 +1,19 @@
-import { roleSchema } from '@semicek-innovations/auth'
 import { z } from 'zod'
 
-import { passwordSchema, usernameSchema } from './user'
+import { userSchemaWithPassword } from './user'
 
-export const registerSchema = z.object({
-  username: usernameSchema,
-  password: passwordSchema,
-  role: roleSchema
-})
+export const registerSchema = userSchemaWithPassword
+  .pick({
+    email: true,
+    password: true,
+    name: true,
+    username: true,
+    role: true
+  })
+  .partial({
+    username: true,
+    role: true
+  })
 registerSchema._def.name = 'RegisterSchema'
 
 export type RegisterPayload = z.infer<typeof registerSchema>

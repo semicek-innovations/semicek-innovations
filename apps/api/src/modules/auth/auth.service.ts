@@ -12,11 +12,11 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, password: string) {
-    return await this.usersService.validateUser(username, password)
+  validateUser(login: string, password: string) {
+    return this.usersService.validateUser(login, password)
   }
 
-  async login(user: User) {
+  login(user: User) {
     const payload: JwtPayload = { id: user.id, username: user.username }
     return { token: this.jwtService.sign(payload) }
   }

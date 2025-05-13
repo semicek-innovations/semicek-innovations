@@ -8,9 +8,10 @@ export class ZodValidationPipe implements PipeTransform {
   // Optionally, a schema can be passed in the constructor.
   constructor(private schema?: ZodSchema) {}
 
-  transform({ __headers, ...value }: any, metadata: ArgumentMetadata) {
+  transform(value: any, metadata: ArgumentMetadata) {
     let schemaToUse: ZodSchema | undefined = this.schema
-    const headers: IncomingHttpHeaders = __headers || {}
+    const headers: IncomingHttpHeaders = value?.__headers || {}
+    if (typeof value === 'object' && '__headers' in value) delete value.__headers
 
     // If no schema was provided in the constructor, check if the metatype has a static schema.
     if (!schemaToUse && metadata.metatype && (metadata.metatype as any).schema) {

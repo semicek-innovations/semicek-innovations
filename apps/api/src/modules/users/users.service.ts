@@ -1,4 +1,6 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { generateUsername } from '@semicek-innovations/shared-utils'
 import * as bcrypt from 'bcryptjs'
 
 import { PrismaService } from '../prisma/prisma.service'
@@ -9,8 +11,8 @@ import { UpdateDto } from './dtos/update.dto'
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  async validateUser(username: string, password: string) {
-    const user = await this.prismaService.user.findUnique({ where: { username } })
+  async validateUser(login: string, password: string) {
+    const user = await this.prismaService.user.findFirst({ where: { OR: [{ email: login }, { username: login }] } })
     if (!user) return undefined
 
     const match = await bcrypt.compare(password, user.password)
@@ -22,71 +24,88 @@ export class UsersService {
   }
 
   async findAll() {
-    const users = await this.prismaService.user.findMany({ omit: { password: true } })
-    return users
+    return await this.prismaService.user.findMany({ omit: { password: true } })
   }
 
   async findOne(id: string) {
-    const user = await this.prismaService.user.findUnique({ where: { id }, omit: { password: true } })
-    return user
+    try {
+      return await this.prismaService.user.findUniqueOrThrow({ where: { id }, omit: { password: true } })
+    } catch (error: any) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('User not found')
+        }
+      }
+
+      throw new BadRequestException('An error occurred while finding the user', {
+        cause: error,
+        description: error.message
+      })
+    }
   }
 
   async register(body: RegisterDto) {
-    const existingUser = await this.prismaService.user.findUnique({
-      where: { username: body.username }
-    })
-    if (existingUser) {
-      throw new ConflictException({ errors: { username: ['Username already exists'] } })
-    }
-
     const hashedPassword = await bcrypt.hash(body.password, 10)
 
-    return await this.prismaService.user.create({
-      data: {
-        username: body.username,
-        password: hashedPassword,
-        role: body.role,
-        subscriptionPlan: 'FREE',
-        email: '',
-        isActive: true,
-        name: ''
-      },
-      omit: { password: true }
-    })
+    if (!body.username) {
+      body.username = generateUsername(body.name)
+    }
+
+    try {
+      return await this.prismaService.user.create({
+        data: {
+          email: body.email,
+          password: hashedPassword,
+          name: body.name,
+          username: body.username,
+          role: body.role
+        },
+        omit: { password: true }
+      })
+    } catch (error: any) {
+      throw new BadRequestException('An error occurred while creating the user', {
+        cause: error,
+        description: error.message
+      })
+    }
   }
 
   async update(id: string, body: UpdateDto) {
-    const user = await this.prismaService.user.findUnique({ where: { id } })
-    if (!user) throw new NotFoundException('User not found')
-
     if (body.password) {
       body.password = await bcrypt.hash(body.password, 10)
     }
 
-    if (body.username) {
-      const existingUser = await this.prismaService.user.findUnique({
-        where: { username: body.username }
-      })
-
-      if (existingUser && existingUser.id !== id) {
-        throw new ConflictException({
-          errors: { username: ['Username already exists'] }
-        })
+    try {
+      return await this.prismaService.user.update({ where: { id }, data: body, omit: { password: true } })
+    } catch (error: any) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('User not found')
+        }
       }
-    }
 
-    return await this.prismaService.user.update({
-      where: { id },
-      data: body,
-      omit: { password: true }
-    })
+      throw new BadRequestException('An error occurred while deleting the user', {
+        cause: error,
+        description: error.message
+      })
+    }
   }
 
   async remove(id: string) {
-    const user = await this.prismaService.user.findUnique({ where: { id } })
-    if (!user) throw new NotFoundException('User not found')
+    try {
+      await this.prismaService.user.delete({ where: { id } })
+      return { message: 'User deleted' }
+    } catch (error: any) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('User not found')
+        }
+      }
 
-    await this.prismaService.user.delete({ where: { id } })
-    return { message: 'User deleted' }
+      throw new BadRequestException('An error occurred while deleting the user', {
+        cause: error,
+        description: error.message
+      })
+    }
   }
 }
