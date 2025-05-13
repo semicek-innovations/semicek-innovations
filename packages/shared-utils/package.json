@@ -9,11 +9,13 @@
     "build": "tsup"
   },
   "dependencies": {
+    "lodash.snakecase": "^4.1.1",
     "tsup": "^8.4.0"
   },
   "devDependencies": {
     "@semicek-innovations/eslint-config": "workspace:*",
     "@semicek-innovations/tsconfig": "workspace:*",
+    "@types/lodash.snakecase": "^4.1.9",
     "@types/node": "^20.12.6"
   },
   "eslintConfig": {

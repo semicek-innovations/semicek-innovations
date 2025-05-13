@@ -8,7 +8,7 @@ import { signInAction } from './sign-in'
 export async function signUpAction(payload: SignUpRequest) {
   try {
     await signUp(payload)
-    return await signInAction({ username: payload.username, password: payload.password })
+    return await signInAction({ username: payload.email, password: payload.password })
   } catch (error: any) {
     return getErrors(error)
   }

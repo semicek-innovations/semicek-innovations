@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { FastifyRequest } from 'fastify'
 
-import { CASL, casl, RequiredRule } from '@/decorators/casl'
+import { CASL, casl, RequiredRule } from '@/common/decorators/casl.decorator'
 
 @Injectable()
 export class CaslGuard implements CanActivate {

@@ -1,15 +1,18 @@
-import { ConflictException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { generateUsername } from '@semicek-innovations/shared-utils'
 import * as bcrypt from 'bcryptjs'
 
-import { deleteUser, getNextUserId, getUser, getUsers, saveUser } from '@/db/users'
-
+import { PrismaService } from '../prisma/prisma.service'
 import { RegisterDto } from './dtos/register.dto'
 import { UpdateDto } from './dtos/update.dto'
 
 @Injectable()
 export class UsersService {
-  async validateUser(username: string, password: string) {
-    const user = await getUser('username', username, false)
+  constructor(private prismaService: PrismaService) {}
+
+  async validateUser(login: string, password: string) {
+    const user = await this.prismaService.user.findFirst({ where: { OR: [{ email: login }, { username: login }] } })
     if (!user) return undefined
 
     const match = await bcrypt.compare(password, user.password)
@@ -21,69 +24,88 @@ export class UsersService {
   }
 
   async findAll() {
-    const users = await getUsers()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return users.map(({ password, ...user }) => user)
+    return await this.prismaService.user.findMany({ omit: { password: true } })
   }
 
   async findOne(id: string) {
-    const user = await getUser('id', id)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user
-    return userWithoutPassword
+    try {
+      return await this.prismaService.user.findUniqueOrThrow({ where: { id }, omit: { password: true } })
+    } catch (error: any) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('User not found')
+        }
+      }
+
+      throw new BadRequestException('An error occurred while finding the user', {
+        cause: error,
+        description: error.message
+      })
+    }
   }
 
   async register(body: RegisterDto) {
-    const existingUser = await getUser('username', body.username, false)
-    if (existingUser) {
-      throw new ConflictException({ errors: { username: ['Username already exists'] } })
-    }
-
     const hashedPassword = await bcrypt.hash(body.password, 10)
 
-    const newUser = await saveUser({
-      id: await getNextUserId(),
-      username: body.username,
-      role: body.role,
-      subscriptionPlan: 'FREE',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      email: '',
-      isActive: true,
-      name: '',
-      password: hashedPassword
-    })
+    if (!body.username) {
+      body.username = generateUsername(body.name)
+    }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = newUser
-    return userWithoutPassword
+    try {
+      return await this.prismaService.user.create({
+        data: {
+          email: body.email,
+          password: hashedPassword,
+          name: body.name,
+          username: body.username,
+          role: body.role
+        },
+        omit: { password: true }
+      })
+    } catch (error: any) {
+      throw new BadRequestException('An error occurred while creating the user', {
+        cause: error,
+        description: error.message
+      })
+    }
   }
 
   async update(id: string, body: UpdateDto) {
-    const user = await getUser('id', id)
-
     if (body.password) {
-      const hashedPassword = await bcrypt.hash(body.password, 10)
-      body.password = hashedPassword
+      body.password = await bcrypt.hash(body.password, 10)
     }
 
-    if (body.username) {
-      const existingUser = await getUser('username', body.username, false)
-      if (existingUser && existingUser.id !== id) {
-        throw new ConflictException({ errors: { username: ['Username already exists'] } })
+    try {
+      return await this.prismaService.user.update({ where: { id }, data: body, omit: { password: true } })
+    } catch (error: any) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('User not found')
+        }
       }
+
+      throw new BadRequestException('An error occurred while deleting the user', {
+        cause: error,
+        description: error.message
+      })
     }
-
-    Object.assign(user, body)
-    await saveUser(user)
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user
-    return userWithoutPassword
   }
 
   async remove(id: string) {
-    await deleteUser(id)
-    return { message: 'User deleted' }
+    try {
+      await this.prismaService.user.delete({ where: { id } })
+      return { message: 'User deleted' }
+    } catch (error: any) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('User not found')
+        }
+      }
+
+      throw new BadRequestException('An error occurred while deleting the user', {
+        cause: error,
+        description: error.message
+      })
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
+import { env } from '@semicek-innovations/env'
 
 import { UsersModule } from '../users/users.module'
 import { AuthController } from './auth.controller'
@@ -14,7 +15,7 @@ import { LocalStrategy } from './local.strategy'
     UsersModule,
     PassportModule,
     JwtModule.register({
-      secret: 'SECRET_KEY',
+      secret: env.SECRET_KEY,
       signOptions: { expiresIn: '7d' }
     })
   ],
