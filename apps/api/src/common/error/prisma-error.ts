@@ -6,6 +6,7 @@ import {
   NotFoundException
 } from '@nestjs/common'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { Language, LanguageText, multiLangText } from '@semicek-innovations/i18n'
 
 export type MessageKeys =
   // ─── Common (P1xxx) ───────────────────────────────────────────────────────────
@@ -189,13 +190,23 @@ const codeToKey: Record<string, MessageKeys> = {
   P5011: 'tooManyRequests'
 }
 
-export function prismaError(error: unknown, messages: Partial<Record<MessageKeys, string>>) {
+const unexpectedError = {
+  en: 'An unexpected error occurred',
+  es: 'Ocurrió un error inesperado',
+  fr: 'Une erreur inattendue est survenue',
+  de: 'Ein unerwarteter Fehler ist aufgetreten',
+  'pt-BR': 'Ocorreu um erro inesperado'
+}
+
+export function prismaError(error: unknown, messages: Partial<Record<MessageKeys, LanguageText>>, lang?: Language) {
   if (error instanceof PrismaClientKnownRequestError || typeof (error as any)?.code === 'string') {
     const code = (error as any).code as string
     const key = codeToKey[code]
-    const msg = (key && messages[key]) || (error as any).message
+    const texts = !key && messages[key]
 
-    if (msg) {
+    if (texts) {
+      const msg = multiLangText(texts, { lang })
+
       // Map to HTTP status
       if (/^P20(0[2-4]|0[6-9]|1\d|2[0-5])$/.test(code)) {
         // Unique, FK, record not found → 409 or 404
@@ -219,5 +230,5 @@ export function prismaError(error: unknown, messages: Partial<Record<MessageKeys
     throw error
   }
 
-  throw new BadRequestException((error as any)?.message || 'An unexpected error occurred')
+  throw new BadRequestException((error as any)?.message || multiLangText(unexpectedError, { lang }))
 }

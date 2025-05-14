@@ -5,7 +5,7 @@ import { FastifyRequest } from 'fastify'
 export interface RequiredRule {
   action: Parameters<AppAbility['can']>[0]
   subject: Parameters<AppAbility['can']>[1]
-  message?: string
+  message: string
 }
 
 export const CASL = 'casl'
@@ -20,13 +20,11 @@ export function casl(request: FastifyRequest, ...rules: RequiredRule[]) {
 
   const ability = getUserPermissions(user.id, user.role)
 
-  if (rules.every(rule => ability.can(rule.action, rule.subject as any))) {
-    return true
+  for (const rule of rules) {
+    if (!ability.can(rule.action, rule.subject as any)) {
+      throw new UnauthorizedException(rule.message)
+    }
   }
 
-  const message =
-    rules.find(rule => rule.message)?.message ??
-    `You are not authorized to ${rules.map(rule => `${rule.action} ${rule.subject.toString().toLowerCase()}`).join(', ')}`
-
-  throw new UnauthorizedException(message)
+  return true
 }
