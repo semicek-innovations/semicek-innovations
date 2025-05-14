@@ -8,9 +8,9 @@ import { AppService } from './app.service'
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
+  @Get('juice')
   @Public()
-  getHello(): string {
-    return this.appService.getHello()
+  Juice() {
+    return this.appService.Juice()
   }
 }
