@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common'
 import { ApiBearerAuth } from '@nestjs/swagger'
-import { multiLangText } from '@semicek-innovations/i18n'
 import { FastifyRequest } from 'fastify'
 
 import { casl } from '@/common/decorators/casl.decorator'
@@ -38,7 +37,7 @@ export class UsersController {
     casl(req, {
       action: 'update',
       subject: { __typename: 'User', id, role: 'USER', subscriptionPlan: 'FREE' },
-      message: multiLangText(usersMessages.unauthorizedUpdate(), { lang: req.headers['x-language'] })
+      message: usersMessages.unauthorizedUpdate()
     })
     if (!req.user || req.user.role !== 'ADMIN') delete body.role
     return this.usersService.update(id, body, req.headers['x-language'])
@@ -49,7 +48,7 @@ export class UsersController {
     casl(req, {
       action: 'delete',
       subject: { __typename: 'User', id, role: 'USER', subscriptionPlan: 'FREE' },
-      message: multiLangText(usersMessages.unauthorizedDelete(), { lang: req.headers['x-language'] })
+      message: usersMessages.unauthorizedDelete()
     })
     return this.usersService.remove(id, req.headers['x-language'])
   }

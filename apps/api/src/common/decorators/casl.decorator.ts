@@ -1,11 +1,12 @@
 import { SetMetadata, UnauthorizedException } from '@nestjs/common'
 import { AppAbility, getUserPermissions } from '@semicek-innovations/auth'
+import { LanguageText, multiLangText } from '@semicek-innovations/i18n'
 import { FastifyRequest } from 'fastify'
 
 export interface RequiredRule {
   action: Parameters<AppAbility['can']>[0]
   subject: Parameters<AppAbility['can']>[1]
-  message: string
+  message: LanguageText
 }
 
 export const CASL = 'casl'
@@ -22,7 +23,7 @@ export function casl(request: FastifyRequest, ...rules: RequiredRule[]) {
 
   for (const rule of rules) {
     if (!ability.can(rule.action, rule.subject as any)) {
-      throw new UnauthorizedException(rule.message)
+      throw new UnauthorizedException(multiLangText(rule.message, { lang: request.headers['x-language'] }))
     }
   }
 
