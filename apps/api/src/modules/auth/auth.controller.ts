@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiBody } from '@nestjs/swagger'
 import { FastifyRequest } from 'fastify'
 
@@ -6,6 +6,7 @@ import { Public } from '@/common/decorators/is-public.decorator'
 
 import { AuthService } from './auth.service'
 import { LoginDto } from './dtos/login.dto'
+import { RequestPasswordResetDto, ResetPasswordWithConfirmDto } from './dtos/reset-password.dto'
 import { LocalAuthGuard } from './local-auth.guard'
 
 @Controller('auth')
@@ -24,5 +25,19 @@ export class AuthController {
   @ApiBody({ description: 'Login credentials', type: LoginDto })
   login(@Req() req: FastifyRequest) {
     return this.authService.login(req.user)
+  }
+
+  @Post('request-password-reset')
+  @Public()
+  async requestPasswordReset(@Body() dto: RequestPasswordResetDto) {
+    await this.authService.requestReset(dto)
+    return { message: 'If that email exists, we sent a reset link.' }
+  }
+
+  @Post('reset-password')
+  @Public()
+  async resetPassword(@Body() dto: ResetPasswordWithConfirmDto) {
+    await this.authService.resetPassword(dto)
+    return { message: 'Password has been successfully reset.' }
   }
 }

@@ -1,14 +1,16 @@
 /* eslint-disable no-new-func */
 import { ApiProperty } from '@nestjs/swagger'
-import { ZodObject, ZodRawShape } from 'zod'
+import { ZodType } from 'zod'
 
-import { getMetadataForSchema } from './helpers'
+import { getMetadataForSchema, unwrapZodEffects } from './helpers'
 
 /**
  * Recursively generates a DTO class from a Zod object schema.
  * Accepts an optional dtoName to use for the class name.
  */
-export function createZodDto<T extends ZodObject<ZodRawShape>>(schema: T, dtoName?: string) {
+export function createZodDto<T extends ZodType>(schema: T, dtoName?: string) {
+  const unwrappedSchema = unwrapZodEffects(schema)
+
   class ZodDto {
     static schema = schema
   }
@@ -25,7 +27,7 @@ export function createZodDto<T extends ZodObject<ZodRawShape>>(schema: T, dtoNam
   DynamicDtoClass.schema = schema
 
   // Get the shape of the schema.
-  const shape = schema.shape
+  const shape = unwrappedSchema.shape
 
   for (const key in shape) {
     if (Object.prototype.hasOwnProperty.call(shape, key)) {

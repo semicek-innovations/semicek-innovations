@@ -7,10 +7,22 @@ import {
   ZodNumber,
   ZodObject,
   ZodOptional,
+  ZodRawShape,
   ZodString,
   ZodType,
   ZodUnion
 } from 'zod'
+
+export function unwrapZodEffects(schema: ZodType): ZodObject<ZodRawShape> {
+  let current: ZodType = schema
+  while (current instanceof ZodEffects) {
+    current = current.innerType()
+  }
+  if (!(current instanceof ZodObject)) {
+    throw new Error('createZodDto only supports ZodObject schemas (optionally wrapped in ZodEffects)')
+  }
+  return current
+}
 
 /**
  * Recursively unwrap a schema if it is wrapped in ZodEffects (e.g. from .refine() or .transform())

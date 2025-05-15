@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common'
 import { MailerModule } from '@nestjs-modules/mailer'
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
 import { env } from '@semicek-innovations/env'
+import * as path from 'path'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -19,7 +21,14 @@ import { UsersModule } from './users/users.module'
         }
       },
       defaults: {
-        from: 'no-reply@semicekinnovations.com'
+        from: env.GMAIL_NO_REPLY
+      },
+      template: {
+        dir: path.join(process.cwd(), 'src', 'templates'),
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true
+        }
       }
     }),
     PrismaModule,

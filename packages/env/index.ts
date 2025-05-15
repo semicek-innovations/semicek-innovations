@@ -10,7 +10,10 @@ const server = z.object({
   DATABASE_URL: z.string().default(''),
   DIRECT_URL: z.string().default(''),
   GMAIL_USER: z.string().default(''),
-  GMAIL_PASS: z.string().default('')
+  GMAIL_PASS: z.string().default(''),
+  GMAIL_SUPPORT: z.string().default(''),
+  GMAIL_NO_REPLY: z.string().default(''),
+  FRONTEND_URL: z.string().default('http://localhost:3000')
 })
 
 const client = z.object({
@@ -26,6 +29,9 @@ const processEnv = {
   DIRECT_URL: process.env.DIRECT_URL,
   GMAIL_USER: process.env.GMAIL_USER,
   GMAIL_PASS: process.env.GMAIL_PASS,
+  GMAIL_SUPPORT: process.env.GMAIL_SUPPORT,
+  GMAIL_NO_REPLY: process.env.GMAIL_NO_REPLY,
+  FRONTEND_URL: process.env.FRONTEND_URL,
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL
 }
 

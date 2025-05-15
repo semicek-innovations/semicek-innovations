@@ -9,20 +9,21 @@ datasource db {
 }
 
 model User {
-  id               String           @id @default(uuid())
-  email            String           @unique
-  password         String
-  name             String
-  username         String           @unique
-  birthdate        DateTime?
-  avatarUrl        String? // S3 profile picture
-  preferences      Json? // visibility, notifications, etc.
-  role             Role             @default(USER)
-  subscriptionPlan SubscriptionPlan @default(FREE)
-  subscriptionEnds DateTime? // for trial/expiry checks
-  isActive         Boolean          @default(true)
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
+  id                 String               @id @default(uuid())
+  email              String               @unique
+  password           String
+  name               String
+  username           String               @unique
+  birthdate          DateTime?
+  avatarUrl          String? // S3 profile picture
+  preferences        Json? // visibility, notifications, etc.
+  role               Role                 @default(USER)
+  subscriptionPlan   SubscriptionPlan     @default(FREE)
+  subscriptionEnds   DateTime? // for trial/expiry checks
+  isActive           Boolean              @default(true)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  PasswordResetToken PasswordResetToken[]
 
   @@map("users")
 }
@@ -36,4 +37,16 @@ enum SubscriptionPlan {
   FREE
   PRO
   PREMIUM
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("password_reset_tokens")
 }
