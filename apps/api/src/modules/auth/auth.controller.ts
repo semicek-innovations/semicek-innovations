@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
-import { ApiBearerAuth, ApiBody, ApiHeader } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody } from '@nestjs/swagger'
 import { multiLangText } from '@semicek-innovations/i18n'
 import { FastifyRequest } from 'fastify'
 
@@ -31,7 +31,6 @@ export class AuthController {
 
   @Post('request-password-reset')
   @Public()
-  @ApiHeader({ name: 'x-language', description: 'Language for the response', required: false })
   async requestPasswordReset(@Req() req: FastifyRequest, @Body() dto: RequestPasswordResetDto) {
     const lang = req.headers['x-language']
     await this.authService.requestReset(dto, lang)
