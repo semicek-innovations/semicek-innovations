@@ -16,6 +16,8 @@ import {
   NAME_REQUIRED,
   NAME_TOO_LONG,
   NAME_TOO_SHORT,
+  PASSWORD_INVALID_TYPE,
+  PASSWORD_REQUIRED,
   PASSWORD_TOO_LONG,
   PASSWORD_TOO_SHORT,
   PREFERENCES_INVALID_TYPE,
@@ -73,7 +75,7 @@ export const userSchema = z.object({
 })
 
 export const passwordSchema = z
-  .string()
+  .string({ required_error: PASSWORD_REQUIRED, invalid_type_error: PASSWORD_INVALID_TYPE })
   .trim()
   .min(8, { message: PASSWORD_TOO_SHORT })
   .max(64, { message: PASSWORD_TOO_LONG })

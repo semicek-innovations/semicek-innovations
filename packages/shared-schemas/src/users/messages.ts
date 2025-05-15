@@ -4,8 +4,11 @@ export const ID_INVALID_TYPE = 'ID must be a string.'
 export const INVALID_EMAIL = 'Invalid email address.'
 export const EMAIL_ALREADY_REGISTERED = 'Email already registered.'
 
+export const PASSWORD_REQUIRED = 'Password is required.'
+export const PASSWORD_INVALID_TYPE = 'Password must be a string.'
 export const PASSWORD_TOO_SHORT = 'Password must be at least 8 characters long.'
 export const PASSWORD_TOO_LONG = 'Password must be at most 64 characters long.'
+export const PASSWORDS_DO_NOT_MATCH = 'Passwords do not match.'
 export const INVALID_CREDENTIALS = 'Invalid credentials.'
 
 export const NAME_REQUIRED = 'Name is required.'
@@ -74,6 +77,20 @@ export const userValidationMessages = {
     de: 'Die E-Mail-Adresse ist bereits registriert.',
     'pt-BR': 'O e-mail já está registrado.'
   },
+  [PASSWORD_REQUIRED]: {
+    en: PASSWORD_REQUIRED,
+    es: 'La contraseña es obligatoria.',
+    fr: 'Le mot de passe est requis.',
+    de: 'Das Passwort ist erforderlich.',
+    'pt-BR': 'A senha é obrigatória.'
+  },
+  [PASSWORD_INVALID_TYPE]: {
+    en: PASSWORD_INVALID_TYPE,
+    es: 'La contraseña debe ser una cadena.',
+    fr: 'Le mot de passe doit être une chaîne.',
+    de: 'Das Passwort muss eine Zeichenkette sein.',
+    'pt-BR': 'A senha deve ser uma string.'
+  },
   [PASSWORD_TOO_SHORT]: {
     en: PASSWORD_TOO_SHORT,
     es: 'La contraseña debe tener al menos 8 caracteres.',
@@ -87,6 +104,13 @@ export const userValidationMessages = {
     fr: 'Le mot de passe doit contenir au maximum 64 caractères.',
     de: 'Das Passwort darf höchstens 64 Zeichen lang sein.',
     'pt-BR': 'A senha deve ter no máximo 64 caracteres.'
+  },
+  [PASSWORDS_DO_NOT_MATCH]: {
+    en: PASSWORDS_DO_NOT_MATCH,
+    es: 'Las contraseñas no coinciden.',
+    fr: 'Les mots de passe ne correspondent pas.',
+    de: 'Die Passwörter stimmen nicht überein.',
+    'pt-BR': 'As senhas não coincidem.'
   },
   [INVALID_CREDENTIALS]: {
     en: INVALID_CREDENTIALS,
