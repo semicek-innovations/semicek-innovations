@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt'
 import { MailerService } from '@nestjs-modules/mailer'
 import { env } from '@semicek-innovations/env'
 import { User } from '@semicek-innovations/shared-schemas'
-import * as bcrypt from 'bcryptjs'
 import { randomBytes } from 'crypto'
 import * as path from 'path'
 
@@ -20,10 +19,6 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService
   ) {}
-
-  private async hash(password: string): Promise<string> {
-    return bcrypt.hash(password, 12)
-  }
 
   validateUser(login: string, password: string) {
     return this.usersService.validateUser(login, password)
@@ -77,12 +72,7 @@ export class AuthService {
       throw new BadRequestException('Invalid or expired token')
     }
 
-    const hashed = await this.hash(dto.newPassword)
-
-    await this.prismaService.user.update({
-      where: { id: record.userId },
-      data: { password: hashed }
-    })
+    await this.usersService.update(record.userId, { password: dto.newPassword })
 
     // Delete any existing tokens for this user
     await this.prismaService.passwordResetToken.deleteMany({ where: { userId: record.userId } })
