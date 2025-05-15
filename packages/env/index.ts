@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import { z } from 'zod'
 
 const server = z.object({
@@ -6,7 +8,9 @@ const server = z.object({
   CORS_ORIGINS: z.string().default('*'),
   SECRET_KEY: z.string().default('SECRET_KEY'),
   DATABASE_URL: z.string().default(''),
-  DIRECT_URL: z.string().default('')
+  DIRECT_URL: z.string().default(''),
+  GMAIL_USER: z.string().default(''),
+  GMAIL_PASS: z.string().default('')
 })
 
 const client = z.object({
@@ -20,6 +24,8 @@ const processEnv = {
   SECRET_KEY: process.env.SECRET_KEY,
   DATABASE_URL: process.env.DATABASE_URL,
   DIRECT_URL: process.env.DIRECT_URL,
+  GMAIL_USER: process.env.GMAIL_USER,
+  GMAIL_PASS: process.env.GMAIL_PASS,
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL
 }
 
