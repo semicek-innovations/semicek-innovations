@@ -42,12 +42,14 @@ export function SignUpForm({ children, onSuccess }: { children: React.ReactNode;
         label={multiLangText(authModalTexts.emailLabel)}
         placeholder={multiLangText(authModalTexts.emailPlaceholder)}
         errorMessage={form.formState.errors.email?.message}
+        isRequired
         {...form.register('email')}
       />
       <Input
         label={multiLangText(authModalTexts.nameLabel)}
         placeholder={multiLangText(authModalTexts.namePlaceholder)}
         errorMessage={form.formState.errors.name?.message}
+        isRequired
         {...form.register('name')}
       />
       <Input
@@ -61,6 +63,7 @@ export function SignUpForm({ children, onSuccess }: { children: React.ReactNode;
         placeholder={multiLangText(authModalTexts.passwordPlaceholder)}
         errorMessage={form.formState.errors.password?.message}
         autoComplete="new-password"
+        isRequired
         {...form.register('password')}
       />
 
