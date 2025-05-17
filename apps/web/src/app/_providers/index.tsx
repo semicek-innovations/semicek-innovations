@@ -22,7 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <UserProvider>
       <AbilityProvider>
         <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
-          <HeroUIProvider navigate={router.push}>
+          <HeroUIProvider navigate={router.push} className="flex h-[100dvh] grow flex-col">
             {children}
             <ConfirmationModal />
             <ToastProvider />

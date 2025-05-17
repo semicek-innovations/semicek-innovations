@@ -12,7 +12,7 @@ import { errorPageTexts } from './consts'
 
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
   return (
-    <main className="flex h-screen w-screen flex-col items-center justify-center p-6 text-foreground">
+    <main className="flex h-[100dvh] w-screen flex-col items-center justify-center p-6 text-foreground">
       <motion.div
         className="flex flex-col items-center gap-4"
         initial={{ opacity: 0, y: 20 }}

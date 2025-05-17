@@ -6,7 +6,6 @@ import { RegisterPayload, registerSchema } from '@semicek-innovations/shared-sch
 
 import { useUser } from '@/app/_providers/user-provider'
 import { Button } from '@/components/button'
-import { Form } from '@/components/form'
 import { Input, PasswordInput } from '@/components/input'
 import { MultiLangText, useLanguage } from '@/components/language'
 import { authModalTexts } from '@/components/modal'
@@ -38,7 +37,7 @@ export function SignUpForm({ children, onSuccess }: { children: React.ReactNode;
   }
 
   return (
-    <Form form={form} className="flex flex-col gap-4 p-6 pt-0" autoComplete="off" onSubmit={onSubmit}>
+    <form autoComplete="off" className="flex flex-col gap-4 p-6 pt-0" onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <Input
         label={multiLangText(authModalTexts.usernameLabel)}
         placeholder={multiLangText(authModalTexts.usernamePlaceholder)}
@@ -59,6 +58,6 @@ export function SignUpForm({ children, onSuccess }: { children: React.ReactNode;
           <MultiLangText texts={authModalTexts.registerButton} />
         </Button>
       </div>
-    </Form>
+    </form>
   )
 }

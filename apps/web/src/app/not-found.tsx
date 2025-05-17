@@ -11,7 +11,7 @@ import { notFoundTexts } from './consts'
 
 export default function NotFound() {
   return (
-    <main className="flex h-screen w-screen flex-col items-center justify-center p-6 text-foreground">
+    <main className="flex h-[100dvh] w-screen flex-col items-center justify-center p-6 text-foreground">
       <motion.h1
         className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-6xl font-bold tracking-tight text-transparent md:text-7xl"
         initial={{ opacity: 0, y: -20 }}

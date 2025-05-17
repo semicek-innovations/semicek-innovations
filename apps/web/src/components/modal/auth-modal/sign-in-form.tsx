@@ -6,7 +6,6 @@ import { LoginPayload, loginSchema } from '@semicek-innovations/shared-schemas'
 
 import { useUser } from '@/app/_providers/user-provider'
 import { Button } from '@/components/button'
-import { Form } from '@/components/form'
 import { Input, PasswordInput } from '@/components/input'
 import { MultiLangText, useLanguage } from '@/components/language'
 import { authModalTexts } from '@/components/modal'
@@ -38,7 +37,7 @@ export function SignInForm({ children, onSuccess }: { children: React.ReactNode;
   }
 
   return (
-    <Form form={form} className="flex flex-col gap-4 p-6 pt-0" onSubmit={onSubmit}>
+    <form className="flex flex-col gap-4 p-6 pt-0" onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <Input
         label={multiLangText(authModalTexts.usernameLabel)}
         placeholder={multiLangText(authModalTexts.usernamePlaceholder)}
@@ -58,6 +57,6 @@ export function SignInForm({ children, onSuccess }: { children: React.ReactNode;
           <MultiLangText texts={authModalTexts.loginButton} />
         </Button>
       </div>
-    </Form>
+    </form>
   )
 }
