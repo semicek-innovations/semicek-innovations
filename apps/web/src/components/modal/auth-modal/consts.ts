@@ -75,5 +75,12 @@ export const authModalTexts = {
     es: '¿Ya tienes una cuenta? Inicia sesión',
     fr: 'Vous avez déjà un compte ? Connectez-vous',
     de: 'Sie haben bereits ein Konto? Melden Sie sich an'
+  },
+  forgotPassword: {
+    en: 'Forgot your password?',
+    'pt-BR': 'Esqueceu sua senha?',
+    es: '¿Olvidaste tu contraseña?',
+    fr: 'Mot de passe oublié ?',
+    de: 'Passwort vergessen?'
   }
 }

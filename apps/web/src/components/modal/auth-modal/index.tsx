@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { useLanguage } from '@/components/language'
+import { MultiLangText, useLanguage } from '@/components/language'
 import { Link } from '@/components/link'
 import { Modal } from '@/components/modal'
 
@@ -32,9 +32,16 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
       size="sm"
     >
       <Form onSuccess={() => onOpenChange(false)}>
-        <Link as="button" type="button" color="secondary" onPress={() => setIsLogin(prev => !prev)}>
-          {isLogin ? multiLangText(authModalTexts.switchToRegister) : multiLangText(authModalTexts.switchToLogin)}
-        </Link>
+        <div className="-mt-2 flex flex-col">
+          {isLogin && (
+            <Link href="/request-password-reset" isExternal>
+              <MultiLangText texts={authModalTexts.forgotPassword} />
+            </Link>
+          )}
+          <Link as="button" type="button" onPress={() => setIsLogin(prev => !prev)}>
+            <MultiLangText texts={isLogin ? authModalTexts.switchToRegister : authModalTexts.switchToLogin} />
+          </Link>
+        </div>
       </Form>
     </Modal>
   )
