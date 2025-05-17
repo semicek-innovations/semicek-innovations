@@ -39,6 +39,18 @@ export function SignUpForm({ children, onSuccess }: { children: React.ReactNode;
   return (
     <form autoComplete="off" className="flex flex-col gap-4 p-6 pt-0" onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <Input
+        label={multiLangText(authModalTexts.emailLabel)}
+        placeholder={multiLangText(authModalTexts.emailPlaceholder)}
+        errorMessage={form.formState.errors.email?.message}
+        {...form.register('email')}
+      />
+      <Input
+        label={multiLangText(authModalTexts.nameLabel)}
+        placeholder={multiLangText(authModalTexts.namePlaceholder)}
+        errorMessage={form.formState.errors.name?.message}
+        {...form.register('name')}
+      />
+      <Input
         label={multiLangText(authModalTexts.usernameLabel)}
         placeholder={multiLangText(authModalTexts.usernamePlaceholder)}
         errorMessage={form.formState.errors.username?.message}

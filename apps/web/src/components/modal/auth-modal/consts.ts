@@ -13,6 +13,34 @@ export const authModalTexts = {
     fr: 'Créer un compte',
     de: 'Ein Konto erstellen'
   },
+  emailLabel: {
+    en: 'Email',
+    'pt-BR': 'E-mail',
+    es: 'Correo electrónico',
+    fr: 'Email',
+    de: 'E-Mail'
+  },
+  emailPlaceholder: {
+    en: 'Enter your email address',
+    'pt-BR': 'Digite seu e-mail',
+    es: 'Ingrese su correo electrónico',
+    fr: 'Entrez votre adresse email',
+    de: 'Geben Sie Ihre E-Mail-Adresse ein'
+  },
+  nameLabel: {
+    en: 'Full Name',
+    'pt-BR': 'Nome completo',
+    es: 'Nombre completo',
+    fr: 'Nom complet',
+    de: 'Vollständiger Name'
+  },
+  namePlaceholder: {
+    en: 'Enter your full name',
+    'pt-BR': 'Digite seu nome completo',
+    es: 'Ingrese su nombre completo',
+    fr: 'Entrez votre nom complet',
+    de: 'Geben Sie Ihren vollständigen Namen ein'
+  },
   usernameLabel: {
     en: 'Username',
     'pt-BR': 'Nome de usuário',
