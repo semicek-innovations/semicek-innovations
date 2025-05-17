@@ -37,7 +37,7 @@ export function SignUpForm({ children, onSuccess }: { children: React.ReactNode;
   }
 
   return (
-    <form autoComplete="off" className="flex flex-col gap-4 p-6 pt-0" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+    <form autoComplete="off" className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <Input
         label={multiLangText(authModalTexts.emailLabel)}
         placeholder={multiLangText(authModalTexts.emailPlaceholder)}

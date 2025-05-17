@@ -37,7 +37,7 @@ export function SignInForm({ children, onSuccess }: { children: React.ReactNode;
   }
 
   return (
-    <form className="flex flex-col gap-4 p-6 pt-0" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+    <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <Input
         label={multiLangText(authModalTexts.usernameLabel)}
         placeholder={multiLangText(authModalTexts.usernamePlaceholder)}
