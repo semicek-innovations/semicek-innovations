@@ -22,12 +22,18 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
   const [isLogin, setIsLogin] = useState(true)
   const Form = isLogin ? SignInForm : SignUpForm
 
+  function handleOpenChange(isOpen: boolean) {
+    if (!isOpen) {
+      setIsLogin(true)
+    }
+    onOpenChange(isOpen)
+  }
+
   return (
     <Modal
       title={multiLangText(isLogin ? authModalTexts.titleLogin : authModalTexts.titleRegister)}
       isOpen={isOpen}
-      onOpenChange={onOpenChange}
-      fullScreen={false}
+      onOpenChange={handleOpenChange}
       backdrop="blur"
       size="sm"
     >
