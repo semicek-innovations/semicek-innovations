@@ -38,7 +38,7 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
       backdrop="blur"
       size="sm"
     >
-      <Modal.Body>
+      <Modal.Body className="pb-6 pt-0">
         <Form onSuccess={() => onOpenChange(false)}>
           <div className="-mt-2 flex flex-col">
             {isLogin && (
