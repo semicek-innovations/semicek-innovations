@@ -51,12 +51,5 @@ export const resetPasswordPageTexts = {
     fr: 'Réinitialiser le mot de passe',
     de: 'Passwort zurücksetzen',
     'pt-BR': 'Redefinir senha'
-  },
-  success: {
-    en: 'Password successfully updated! You can now log in.',
-    es: '¡Contraseña actualizada con éxito! Ya puedes iniciar sesión.',
-    fr: 'Mot de passe mis à jour avec succès ! Vous pouvez maintenant vous connecter.',
-    de: 'Passwort erfolgreich aktualisiert! Du kannst dich jetzt anmelden.',
-    'pt-BR': 'Senha atualizada com sucesso! Agora você já pode entrar.'
   }
 } as const

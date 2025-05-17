@@ -5,6 +5,7 @@ import { cookies } from '@/lib/cookies'
 
 export const api = ky.create({
   prefixUrl: env.NEXT_PUBLIC_API_URL,
+  timeout: 2147483647,
   hooks: {
     beforeRequest: [
       async request => {

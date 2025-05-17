@@ -3,44 +3,38 @@
 import { CheckCircleIcon } from '@heroicons/react/24/outline'
 import { addToast } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { resetPasswordWithConfirmSchema } from '@semicek-innovations/shared-schemas'
+import { requestPasswordResetSchema } from '@semicek-innovations/shared-schemas'
 import { motion } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/button'
-import { PasswordInput } from '@/components/input'
+import { Input } from '@/components/input'
 import { MultiLangText, multiLangText } from '@/components/language'
 import { useIsMounted } from '@/hooks/use-is-mounted'
-import { resetPassword, ResetPasswordRequest } from '@/http/reset-password'
+import { requestPasswordReset, RequestPasswordResetRequest } from '@/http/request-password-reset'
 
-import { resetPasswordPageTexts } from './consts'
+import { requestPasswordResetPageTexts } from './consts'
 
-export default function ResetPassword() {
+export default function RequestPasswordReset() {
   const isMounted = useIsMounted()
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token') ?? ''
   const {
     register,
     handleSubmit,
     setError,
     reset,
     formState: { errors, isSubmitting, isSubmitSuccessful }
-  } = useForm<ResetPasswordRequest>({
-    resolver: zodResolver(resetPasswordWithConfirmSchema),
-    defaultValues: { token }
-  })
+  } = useForm<RequestPasswordResetRequest>({ resolver: zodResolver(requestPasswordResetSchema) })
   const [successText, setSuccessText] = useState('')
 
-  async function onSubmit(payload: ResetPasswordRequest) {
-    const response = await resetPassword(payload)
+  async function onSubmit(payload: RequestPasswordResetRequest) {
+    const response = await requestPasswordReset(payload)
 
     if (!response.success) {
       if (response.errors) {
         for (const [field, messages] of Object.entries(response.errors)) {
           if (messages && messages.length > 0) {
-            setError(field as keyof ResetPasswordRequest, { type: 'manual', message: messages[0] })
+            setError(field as keyof RequestPasswordResetRequest, { type: 'manual', message: messages[0] })
           }
         }
       } else {
@@ -70,21 +64,21 @@ export default function ResetPassword() {
         <>
           {/* Heading */}
           <motion.h1
-            className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-center text-4xl font-bold tracking-tight text-transparent md:text-5xl"
+            className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-center text-3xl font-bold tracking-tight text-transparent md:text-4xl"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <MultiLangText texts={resetPasswordPageTexts.title} />
+            <MultiLangText texts={requestPasswordResetPageTexts.title} />
           </motion.h1>
           {/* Description */}
           <motion.p
-            className="mt-3 text-center text-large text-default-400 md:text-xl"
+            className="mt-3 text-center text-medium text-default-400 md:text-large"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <MultiLangText texts={resetPasswordPageTexts.description} />
+            <MultiLangText texts={requestPasswordResetPageTexts.description} />
           </motion.p>
           <motion.form
             onSubmit={handleSubmit(onSubmit)}
@@ -93,18 +87,13 @@ export default function ResetPassword() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <PasswordInput
-              label={multiLangText(resetPasswordPageTexts.newPasswordLabel)}
-              errorMessage={errors.newPassword?.message}
-              {...register('newPassword')}
+            <Input
+              label={multiLangText(requestPasswordResetPageTexts.emailLabel)}
+              errorMessage={errors.email?.message}
+              {...register('email')}
             />
-            <PasswordInput
-              label={multiLangText(resetPasswordPageTexts.confirmPasswordLabel)}
-              errorMessage={errors.confirmPassword?.message}
-              {...register('confirmPassword')}
-            />
-            <Button type="submit" size="lg" isLoading={isSubmitting} isDisabled={!token}>
-              <MultiLangText texts={resetPasswordPageTexts.submit} />
+            <Button type="submit" size="lg" isLoading={isSubmitting}>
+              <MultiLangText texts={requestPasswordResetPageTexts.submit} />
             </Button>
           </motion.form>
         </>

@@ -3,13 +3,10 @@
 import { User } from '@semicek-innovations/shared-schemas'
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
 
-import { signInAction } from '@/actions/sign-in'
-import { signOutAction } from '@/actions/sign-out'
-import { signUpAction } from '@/actions/sign-up'
 import { useIsMounted } from '@/hooks/use-is-mounted'
 import { getUser } from '@/http/auth-get-user'
-import { SignInRequest } from '@/http/sign-in'
-import { SignUpRequest } from '@/http/sign-up'
+import { signIn, SignInRequest } from '@/http/sign-in'
+import { signUp, SignUpRequest } from '@/http/sign-up'
 import { cookies } from '@/lib/cookies'
 
 export interface UserContextProps {
@@ -17,9 +14,9 @@ export interface UserContextProps {
   isAuthenticated: boolean
   isAdmin: boolean
   isLoading: boolean
-  signIn: (payload: SignInRequest) => ReturnType<typeof signInAction>
-  signUp: (payload: SignUpRequest) => ReturnType<typeof signUpAction>
-  signOut: () => Promise<void>
+  signIn: (payload: SignInRequest) => ReturnType<typeof signIn>
+  signUp: (payload: SignUpRequest) => ReturnType<typeof signUp>
+  signOut: () => void
 }
 
 export const UserContext = createContext({} as UserContextProps)
@@ -36,19 +33,19 @@ export function UserProvider({ children }: { children: ReactNode }) {
   })
 
   const handleSignIn = useCallback(async (payload: SignInRequest) => {
-    const response = await signInAction(payload)
+    const response = await signIn(payload)
     if (response.success) setUser(response.user)
     return response
   }, [])
 
   const handleSignUp = useCallback(async (payload: SignUpRequest) => {
-    const response = await signUpAction(payload)
+    const response = await signUp(payload)
     if (response.success) setUser(response.user)
     return response
   }, [])
 
-  const handleSignOut = useCallback(async () => {
-    await signOutAction()
+  const handleSignOut = useCallback(() => {
+    cookies.delete('token')
     setUser(undefined)
   }, [])
 
