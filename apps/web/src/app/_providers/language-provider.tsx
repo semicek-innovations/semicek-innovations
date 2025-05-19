@@ -1,8 +1,10 @@
 'use client'
 
 import { LanguageText, SupportedLanguage } from '@semicek-innovations/i18n'
+import { useRouter } from 'next/navigation'
 import { createContext, useCallback, useContext, useState } from 'react'
 
+import { useIsMounted } from '@/hooks/use-is-mounted'
 import { cookies } from '@/lib/cookies'
 import { multiLangText } from '@/lib/i18n'
 
@@ -26,7 +28,9 @@ function getSavedLanguage(): SupportedLanguage {
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
   const [language, setLanguage] = useState(getSavedLanguage)
+  const isMounted = useIsMounted(router.refresh)
 
   const handleMultiLangText = useCallback(
     (texts: LanguageText) => {
@@ -42,7 +46,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, multiLangText: handleMultiLangText }}>
-      {children}
+      {isMounted ? children : null}
     </LanguageContext.Provider>
   )
 }
