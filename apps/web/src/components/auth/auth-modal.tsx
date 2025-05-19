@@ -35,19 +35,20 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
       title={multiLangText(isLogin ? authModalTexts.titleLogin : authModalTexts.titleRegister)}
       isOpen={isOpen}
       onOpenChange={handleOpenChange}
+      classNames={{ header: 'pb-0' }}
       fullScreen={false}
       backdrop="blur"
       size="sm"
     >
-      <Modal.Body className="pb-6 pt-0">
+      <Modal.Body className="p-6">
         <Form onSuccess={() => onOpenChange(false)}>
           <div className="-mt-2 flex flex-col">
             {isLogin && (
-              <Link href="/request-password-reset" isExternal>
+              <Link href="/request-password-reset" className="w-fit" isExternal>
                 <MultiLangText texts={authModalTexts.forgotPassword} />
               </Link>
             )}
-            <Link as="button" type="button" onPress={() => setIsLogin(prev => !prev)}>
+            <Link as="button" type="button" className="w-fit" onPress={() => setIsLogin(prev => !prev)}>
               <MultiLangText texts={isLogin ? authModalTexts.switchToRegister : authModalTexts.switchToLogin} />
             </Link>
           </div>

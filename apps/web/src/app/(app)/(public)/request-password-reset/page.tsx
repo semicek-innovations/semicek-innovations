@@ -1,3 +1,4 @@
+import { Guard } from '@/components/guard'
 import { generateMultiLangMetadata } from '@/lib/i18n'
 
 import RequestPasswordReset from '.'
@@ -8,5 +9,9 @@ export function generateMetadata() {
 }
 
 export default function Page() {
-  return <RequestPasswordReset />
+  return (
+    <Guard cannot={['get', 'User']}>
+      <RequestPasswordReset />
+    </Guard>
+  )
 }

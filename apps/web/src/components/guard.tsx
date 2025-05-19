@@ -1,7 +1,8 @@
 'use client'
 
 import { AppAbility } from '@semicek-innovations/auth'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useLayoutEffect } from 'react'
 
 import { useAbility } from '@/app/_providers/ability-provider'
 import { useUser } from '@/app/_providers/user-provider'
@@ -15,15 +16,18 @@ export interface GuardProps {
 }
 
 export function Guard({ children, can: canProps, cannot: cannotProps, redirectTo = '/' }: GuardProps) {
+  const router = useRouter()
   const { isLoading } = useUser()
   const { can, cannot } = useAbility()
-  const isAllowed = (!canProps || can(...canProps)) && (!cannotProps || !cannot(...cannotProps))
+  const isAllowed = (!canProps || can(...canProps)) && (!cannotProps || cannot(...cannotProps))
 
-  if (isLoading) return <Loading isFixed={false} />
+  useLayoutEffect(() => {
+    if (!isLoading && !isAllowed) {
+      router.replace(redirectTo)
+    }
+  }, [cannot, cannotProps, isAllowed, isLoading, redirectTo, router])
 
-  if (!isAllowed) {
-    return redirect(redirectTo)
-  }
+  if (isLoading || !isAllowed) return <Loading isFixed={false} />
 
   return <>{children}</>
 }
