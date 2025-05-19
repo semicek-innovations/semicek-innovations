@@ -1,12 +1,12 @@
 'use client'
 
-import { SupportedLanguage } from '@semicek-innovations/i18n'
+import { matchLang, SupportedLanguage } from '@semicek-innovations/i18n'
 import { useRouter } from 'next/navigation'
 
 import { useLanguage } from '@/app/_providers/language-provider'
 
 import { Autocomplete } from '../autocomplete'
-import { languages } from './consts'
+import { languages, supportedLanguages } from './consts'
 
 const languageSelectTexts = {
   label: {
@@ -42,7 +42,7 @@ export function LanguageAutocomplete() {
       items={languages}
       valueKey="code"
       labelKey="name"
-      selectedKey={language}
+      selectedKey={matchLang(supportedLanguages, language)}
       onSelectionChange={handleLanguageChange}
       isClearable={false}
     />

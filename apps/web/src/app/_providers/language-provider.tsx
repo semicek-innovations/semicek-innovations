@@ -1,6 +1,6 @@
 'use client'
 
-import { LanguageText, SupportedLanguage } from '@semicek-innovations/i18n'
+import { Language, LanguageText } from '@semicek-innovations/i18n'
 import { useRouter } from 'next/navigation'
 import { createContext, useCallback, useContext, useState } from 'react'
 
@@ -9,22 +9,22 @@ import { cookies } from '@/lib/cookies'
 import { multiLangText } from '@/lib/i18n'
 
 export interface LanguageContextProps {
-  language: SupportedLanguage
-  setLanguage: (lang: SupportedLanguage) => void
+  language: Language
+  setLanguage: (lang: Language) => void
   multiLangText: (texts: LanguageText) => string
 }
 
 export const LanguageContext = createContext({} as LanguageContextProps)
 
-function getBrowserLanguage(): SupportedLanguage {
+function getBrowserLanguage(): Language {
   if (typeof window === 'undefined') return 'en'
-  const browserLang = navigator.language as SupportedLanguage
+  const browserLang = navigator.language as Language
   cookies.set('preferred-language', browserLang)
   return browserLang
 }
 
-function getSavedLanguage(): SupportedLanguage {
-  return cookies.get<SupportedLanguage>('preferred-language') || getBrowserLanguage()
+function getSavedLanguage(): Language {
+  return cookies.get<Language>('preferred-language') || getBrowserLanguage()
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
@@ -39,7 +39,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     [language]
   )
 
-  const handleSetLanguage = useCallback((lang: SupportedLanguage) => {
+  const handleSetLanguage = useCallback((lang: Language) => {
     cookies.set('preferred-language', lang)
     setLanguage(lang)
   }, [])

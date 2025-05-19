@@ -1,14 +1,14 @@
 'use client'
 
 import { Avatar, Popover, PopoverContent, PopoverTrigger, ScrollShadow } from '@heroui/react'
-import { SupportedLanguage } from '@semicek-innovations/i18n'
+import { matchLang, SupportedLanguage } from '@semicek-innovations/i18n'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import { useLanguage } from '@/app/_providers/language-provider'
 
 import { Button } from '../button'
-import { languages } from './consts'
+import { languages, supportedLanguages } from './consts'
 
 interface LanguagePopoverProps {
   className?: string
@@ -31,7 +31,7 @@ export function LanguagePopover({ className }: LanguagePopoverProps) {
         <Avatar
           as="button"
           color="secondary"
-          src={languages.find(l => l.code === language)?.avatar}
+          src={languages.find(l => l.code === matchLang(supportedLanguages, language))?.avatar}
           className="h-6 w-6"
         />
       </PopoverTrigger>
