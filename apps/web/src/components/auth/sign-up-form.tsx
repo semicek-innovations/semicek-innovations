@@ -3,19 +3,22 @@
 import { addToast } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RegisterPayload, registerSchema } from '@semicek-innovations/shared-schemas'
+import { generateUsername } from '@semicek-innovations/shared-utils'
 
 import { useLanguage } from '@/app/_providers/language-provider'
 import { useUser } from '@/app/_providers/user-provider'
 import { Button } from '@/components/button'
 import { Input, PasswordInput } from '@/components/input'
 import { MultiLangText } from '@/components/language'
-import { authModalTexts } from '@/components/modal'
 import { useForm } from '@/hooks/use-form'
+
+import { authModalTexts } from './consts'
 
 export function SignUpForm({ children, onSuccess }: { children: React.ReactNode; onSuccess?: () => void }) {
   const { signUp } = useUser()
   const { multiLangText } = useLanguage()
   const form = useForm<RegisterPayload>({ resolver: zodResolver(registerSchema), defaultValues: { role: 'USER' } })
+  const name = form.watch('name')
 
   async function onSubmit(payload: RegisterPayload) {
     const response = await signUp(payload)
@@ -55,7 +58,7 @@ export function SignUpForm({ children, onSuccess }: { children: React.ReactNode;
       />
       <Input
         label={multiLangText(authModalTexts.usernameLabel)}
-        placeholder={multiLangText(authModalTexts.usernamePlaceholder)}
+        placeholder={name ? generateUsername(name, false) : multiLangText(authModalTexts.usernamePlaceholder)}
         errorMessage={form.formState.errors.username?.message}
         {...form.register('username')}
       />

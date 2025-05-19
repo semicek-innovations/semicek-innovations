@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { useLanguage } from '@/app/_providers/language-provider'
 import { useIsMounted } from '@/hooks/use-is-mounted'
 
-import { AuthButton } from '../button'
+import { AuthButton } from '../auth'
 import { FaviconFilled, SemicekInnovations } from '../icon'
 import { LanguagePopover } from '../language'
 import { ThemeSwitch } from '../theme-switch'

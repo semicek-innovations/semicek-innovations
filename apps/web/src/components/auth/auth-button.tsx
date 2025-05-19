@@ -5,9 +5,9 @@ import { forwardRef, useState } from 'react'
 
 import { useUser } from '@/app/_providers/user-provider'
 
+import { Button, ButtonProps } from '../button'
 import { MultiLangText } from '../language'
-import { AuthModal } from '../modal'
-import { Button, ButtonProps } from './button'
+import { AuthModal } from './auth-modal'
 
 export type AuthButtonProps = Omit<ButtonProps, 'isLoading'>
 

@@ -9,8 +9,9 @@ import { useUser } from '@/app/_providers/user-provider'
 import { Button } from '@/components/button'
 import { Input, PasswordInput } from '@/components/input'
 import { MultiLangText } from '@/components/language'
-import { authModalTexts } from '@/components/modal'
 import { useForm } from '@/hooks/use-form'
+
+import { authModalTexts } from './consts'
 
 export function SignInForm({ children, onSuccess }: { children: React.ReactNode; onSuccess?: () => void }) {
   const { signIn } = useUser()
