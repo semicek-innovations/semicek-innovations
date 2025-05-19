@@ -4,10 +4,11 @@ import { addToast } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RegisterPayload, registerSchema } from '@semicek-innovations/shared-schemas'
 
+import { useLanguage } from '@/app/_providers/language-provider'
 import { useUser } from '@/app/_providers/user-provider'
 import { Button } from '@/components/button'
 import { Input, PasswordInput } from '@/components/input'
-import { MultiLangText, useLanguage } from '@/components/language'
+import { MultiLangText } from '@/components/language'
 import { authModalTexts } from '@/components/modal'
 import { useForm } from '@/hooks/use-form'
 

@@ -3,9 +3,10 @@
 import { SupportedLanguage } from '@semicek-innovations/i18n'
 import { useRouter } from 'next/navigation'
 
+import { useLanguage } from '@/app/_providers/language-provider'
+
 import { Autocomplete } from '../autocomplete'
 import { languages } from './consts'
-import { useLanguage } from './context'
 
 const languageSelectTexts = {
   label: {

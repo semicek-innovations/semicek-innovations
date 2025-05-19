@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 
-import { MultiLangText, useLanguage } from '@/components/language'
+import { useLanguage } from '@/app/_providers/language-provider'
+import { MultiLangText } from '@/components/language'
 import { Link } from '@/components/link'
 import { Modal } from '@/components/modal'
 

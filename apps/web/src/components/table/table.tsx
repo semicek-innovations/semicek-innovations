@@ -12,7 +12,8 @@ import {
 } from '@heroui/react'
 import { useCallback, useMemo } from 'react'
 
-import { useLanguage } from '../language'
+import { useLanguage } from '@/app/_providers/language-provider'
+
 import { TableColumnSelector } from './column-selector'
 import { TableContext } from './context'
 import { useTableContext, useTableValues } from './hooks'

@@ -3,11 +3,11 @@
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { tv } from '@heroui/react'
 
+import { useLanguage } from '@/app/_providers/language-provider'
 import { capitalize } from '@/lib/string'
 
 import { Button, ButtonProps } from '../button'
 import { Dropdown, DropdownItemProps, DropdownMenuProps, DropdownProps, DropdownTriggerProps } from '../dropdown'
-import { useLanguage } from '../language'
 import { useTable } from './hooks'
 import { TableProps } from './types'
 

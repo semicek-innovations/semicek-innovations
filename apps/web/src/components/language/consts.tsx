@@ -5,6 +5,8 @@ import { SupportedLanguage } from '@semicek-innovations/i18n'
 
 import { AutocompleteItemProps } from '../autocomplete'
 
+export const supportedLanguages: SupportedLanguage[] = ['en', 'es', 'fr', 'de', 'pt-BR']
+
 export const languages: {
   code: string
   name: string

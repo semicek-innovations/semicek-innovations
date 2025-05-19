@@ -2,7 +2,7 @@
 
 import { LanguageText } from '@semicek-innovations/i18n'
 
-import { useLanguage } from './context'
+import { useLanguage } from '@/app/_providers/language-provider'
 
 export interface MultiLangTextProps {
   texts: LanguageText

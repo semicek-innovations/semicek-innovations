@@ -3,7 +3,8 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { forwardRef } from 'react'
 
-import { useLanguage } from '../language'
+import { useLanguage } from '@/app/_providers/language-provider'
+
 import { Input, InputProps } from '.'
 
 export const searchPlaceholderTexts = {

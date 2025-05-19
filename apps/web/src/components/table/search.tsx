@@ -2,9 +2,10 @@
 
 import { useCallback } from 'react'
 
+import { useLanguage } from '@/app/_providers/language-provider'
+
 import { InputProps } from '../input'
 import { SearchInput } from '../input/search'
-import { useLanguage } from '../language'
 import { useTable } from './hooks'
 import { TableProps } from './types'
 

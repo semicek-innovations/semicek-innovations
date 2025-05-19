@@ -9,9 +9,10 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { useLanguage } from '@/app/_providers/language-provider'
 import { Button } from '@/components/button'
 import { PasswordInput } from '@/components/input'
-import { MultiLangText, multiLangText } from '@/components/language'
+import { MultiLangText } from '@/components/language'
 import { useIsMounted } from '@/hooks/use-is-mounted'
 import { resetPassword, ResetPasswordRequest } from '@/http/reset-password'
 
@@ -21,6 +22,7 @@ export default function ResetPassword() {
   const isMounted = useIsMounted()
   const searchParams = useSearchParams()
   const token = searchParams.get('token') ?? ''
+  const { multiLangText } = useLanguage()
   const {
     register,
     handleSubmit,

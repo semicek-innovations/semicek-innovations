@@ -8,9 +8,10 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { useLanguage } from '@/app/_providers/language-provider'
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
-import { MultiLangText, multiLangText } from '@/components/language'
+import { MultiLangText } from '@/components/language'
 import { useIsMounted } from '@/hooks/use-is-mounted'
 import { requestPasswordReset, RequestPasswordResetRequest } from '@/http/request-password-reset'
 
@@ -18,6 +19,7 @@ import { requestPasswordResetPageTexts } from './consts'
 
 export default function RequestPasswordReset() {
   const isMounted = useIsMounted()
+  const { multiLangText } = useLanguage()
   const {
     register,
     handleSubmit,

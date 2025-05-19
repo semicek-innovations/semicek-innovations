@@ -3,25 +3,25 @@
 import { UsersIcon } from '@heroicons/react/24/outline'
 import { useMemo } from 'react'
 
-import { useLanguage } from '@/components/language'
+import { useLanguage } from '@/app/_providers/language-provider'
 import { SidebarRoute, SidebarRouteProps } from '@/components/sidebar'
 
 import { protectedSidebarTexts } from './consts'
 
 export function ProtectedSidebarRoutes() {
-  const lang = useLanguage()
+  const { multiLangText } = useLanguage()
   const routes = useMemo(
     () =>
       [
         {
           icon: UsersIcon,
           href: '#',
-          children: lang.multiLangText(protectedSidebarTexts.routes.users),
+          children: multiLangText(protectedSidebarTexts.routes.users),
           // can: { I: 'get', a: 'User' },
           classNames: { icon: 'stroke-2' }
         }
       ] as SidebarRouteProps[],
-    [lang]
+    [multiLangText]
   )
 
   return (

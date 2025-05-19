@@ -11,11 +11,12 @@ import {
 import Link from 'next/link'
 import { useState } from 'react'
 
+import { useLanguage } from '@/app/_providers/language-provider'
 import { useIsMounted } from '@/hooks/use-is-mounted'
 
 import { AuthButton } from '../button'
 import { FaviconFilled, SemicekInnovations } from '../icon'
-import { LanguagePopover, useLanguage } from '../language'
+import { LanguagePopover } from '../language'
 import { ThemeSwitch } from '../theme-switch'
 import { texts } from './consts'
 import { NavLink } from './nav-link'

@@ -5,9 +5,10 @@ import { SupportedLanguage } from '@semicek-innovations/i18n'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+import { useLanguage } from '@/app/_providers/language-provider'
+
 import { Button } from '../button'
 import { languages } from './consts'
-import { useLanguage } from './context'
 
 interface LanguagePopoverProps {
   className?: string
