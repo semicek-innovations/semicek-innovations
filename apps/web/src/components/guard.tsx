@@ -27,7 +27,9 @@ export function Guard({ children, can: canProps, cannot: cannotProps, redirectTo
     }
   }, [cannot, cannotProps, isAllowed, isLoading, redirectTo, router])
 
-  if (isLoading || !isAllowed) return <Loading isFixed={false} />
+  if (isLoading) return <Loading isFixed={false} />
+
+  if (!isAllowed) return null
 
   return <>{children}</>
 }
