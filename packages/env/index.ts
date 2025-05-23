@@ -13,7 +13,9 @@ const server = z.object({
   GMAIL_PASS: z.string().default(''),
   GMAIL_SUPPORT: z.string().default(''),
   GMAIL_NO_REPLY: z.string().default(''),
-  FRONTEND_URL: z.string().default('http://localhost:3000')
+  FRONTEND_URL: z.string().default('http://localhost:3000'),
+  STRIPE_SECRET_KEY: z.string().default(''),
+  STRIPE_WEBHOOK_SECRET: z.string().default('')
 })
 
 const client = z.object({
@@ -32,6 +34,8 @@ const processEnv = {
   GMAIL_SUPPORT: process.env.GMAIL_SUPPORT,
   GMAIL_NO_REPLY: process.env.GMAIL_NO_REPLY,
   FRONTEND_URL: process.env.FRONTEND_URL,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL
 }
 
