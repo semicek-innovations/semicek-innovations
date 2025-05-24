@@ -1,14 +1,23 @@
-import { Body, Controller, Post, Req } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req } from '@nestjs/common'
 import { ApiBearerAuth } from '@nestjs/swagger'
 import { FastifyRequest } from 'fastify'
 
 import { StripeService } from '../stripe/stripe.service'
 import { CreateCheckoutSessionDto } from './dtos/create-checkout-session.dto'
+import { SubscriptionService } from './subscription.service'
 
 @Controller('subscription')
 @ApiBearerAuth('token')
 export class SubscriptionController {
-  constructor(private readonly stripe: StripeService) {}
+  constructor(
+    private readonly stripe: StripeService,
+    private readonly subscription: SubscriptionService
+  ) {}
+
+  @Get('plans')
+  async getAvailablePlans() {
+    return await this.subscription.getAvailablePlans()
+  }
 
   @Post('checkout')
   async createCheckoutSession(@Req() req: FastifyRequest, @Body() body: CreateCheckoutSessionDto) {

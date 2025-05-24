@@ -24,10 +24,10 @@ export class SubscriptionService {
   async getAvailablePlans() {
     const prices = await this.stripe.client.prices.list({ active: true, expand: ['data.product'] })
     return prices.data
-      .filter(p => p.id in Object.values(this.stripe.prices))
+      .filter(p => Object.values(this.stripe.prices).includes(p.id))
       .map(p => ({
         priceId: p.id,
-        price: p.unit_amount,
+        price: (p.unit_amount ?? 0) / 100,
         plan: this.stripe.getPlanFromPriceId(p.id),
         productName: (p.product as Stripe.Product)?.name,
         productDescription: (p.product as Stripe.Product)?.description,
