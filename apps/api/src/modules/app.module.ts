@@ -8,6 +8,8 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { PrismaModule } from './prisma/prisma.module'
+import { StripeModule } from './stripe/stripe.module'
+import { SubscriptionModule } from './subscription/subscription.module'
 import { UsersModule } from './users/users.module'
 
 @Module({
@@ -33,7 +35,9 @@ import { UsersModule } from './users/users.module'
     }),
     PrismaModule,
     AuthModule,
-    UsersModule
+    UsersModule,
+    StripeModule,
+    SubscriptionModule
   ],
   controllers: [AppController],
   providers: [AppService]

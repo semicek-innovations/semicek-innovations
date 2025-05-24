@@ -9,7 +9,7 @@ import { CORS_ORIGINS, ENV, PORT } from './config/app'
 import { AppModule } from './modules/app.module'
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter())
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), { rawBody: true })
 
   app.enableCors({
     origin: CORS_ORIGINS,

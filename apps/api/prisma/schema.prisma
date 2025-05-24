@@ -15,15 +15,15 @@ model User {
   name               String
   username           String               @unique
   birthdate          DateTime?
-  avatarUrl          String? // S3 profile picture
+  avatarUrl          String?
   preferences        Json? // visibility, notifications, etc.
   role               Role                 @default(USER)
-  subscriptionPlan   SubscriptionPlan     @default(FREE)
-  subscriptionEnds   DateTime? // for trial/expiry checks
   isActive           Boolean              @default(true)
+  stripeCustomerId   String?              @unique(map: "user_stripe_customer_id_key")
+  subscription       Subscription[]
+  PasswordResetToken PasswordResetToken[]
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
-  PasswordResetToken PasswordResetToken[]
 
   @@map("users")
 }
@@ -31,12 +31,6 @@ model User {
 enum Role {
   USER
   ADMIN
-}
-
-enum SubscriptionPlan {
-  FREE
-  PRO
-  PREMIUM
 }
 
 model PasswordResetToken {
@@ -49,4 +43,36 @@ model PasswordResetToken {
 
   @@index([userId])
   @@map("password_reset_tokens")
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  PREMIUM
+}
+
+enum SubscriptionStatus {
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+}
+
+model Subscription {
+  id          String           @id @default(uuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+  stripeSubId String           @unique(map: "subscription_sub_id_key")
+  priceId     String
+  plan        SubscriptionPlan
+  status      SubscriptionStatus
+  endDate     DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([userId])
+  @@map("subscription")
 }
