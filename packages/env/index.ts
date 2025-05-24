@@ -15,11 +15,14 @@ const server = z.object({
   GMAIL_NO_REPLY: z.string().default(''),
   FRONTEND_URL: z.string().default('http://localhost:3000'),
   STRIPE_SECRET_KEY: z.string().default(''),
-  STRIPE_WEBHOOK_SECRET: z.string().default('')
+  STRIPE_WEBHOOK_SECRET: z.string().default(''),
+  STRIPE_PRO_PRICE_ID: z.string().default(''),
+  STRIPE_PREMIUM_PRICE_ID: z.string().default('')
 })
 
 const client = z.object({
-  NEXT_PUBLIC_API_URL: z.string().url().default('http://localhost:3333')
+  NEXT_PUBLIC_API_URL: z.string().url().default('http://localhost:3333'),
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().default('')
 })
 
 const processEnv = {
@@ -36,7 +39,10 @@ const processEnv = {
   FRONTEND_URL: process.env.FRONTEND_URL,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
-  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL
+  STRIPE_PRO_PRICE_ID: process.env.STRIPE_PRO_PRICE_ID,
+  STRIPE_PREMIUM_PRICE_ID: process.env.STRIPE_PREMIUM_PRICE_ID,
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 }
 
 type ServerEnvs = z.infer<typeof server>

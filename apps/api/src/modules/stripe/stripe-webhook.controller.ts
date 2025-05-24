@@ -1,6 +1,5 @@
-import { BadRequestException, Controller, Headers, Post, RawBodyRequest, Req } from '@nestjs/common'
+import { BadRequestException, Controller, Headers, HttpCode, Post, RawBodyRequest, Req } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { env } from '@semicek-innovations/env'
 import Stripe from 'stripe'
 
 import { Public } from '@/common/decorators/is-public.decorator'
@@ -11,21 +10,17 @@ import { StripeService } from './stripe.service'
 @ApiTags('Stripe Webhook')
 @Controller('stripe/webhook')
 export class StripeWebhookController {
-  private stripe: Stripe
-  private secret: string
-  private processedEvents = new Set<string>()
+  private readonly processedEvents = new Set<string>()
 
-  constructor(private stripeService: StripeService) {
-    this.secret = env.STRIPE_WEBHOOK_SECRET
-    this.stripe = this.stripeService.getStripe()
-  }
+  constructor(private stripe: StripeService) {}
 
   @Post()
+  @HttpCode(200)
   async handleStripeWebhook(@Req() req: RawBodyRequest<Request>, @Headers('stripe-signature') signature: string) {
     let event: Stripe.Event
 
     try {
-      event = this.stripe.webhooks.constructEvent(req.rawBody!, signature, this.secret)
+      event = this.stripe.constructEventFromWebhook(req.rawBody!, signature)
     } catch (err: any) {
       console.error('Webhook signature verification failed.', err.message)
       throw new BadRequestException('Webhook Error: Invalid signature')
