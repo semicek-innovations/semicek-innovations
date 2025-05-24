@@ -5,7 +5,8 @@ import { StripeService } from './stripe.service'
 import { StripeWebhookController } from './stripe-webhook.controller'
 
 @Module({
-  providers: [PrismaModule, StripeService],
+  imports: [PrismaModule],
+  providers: [StripeService],
   controllers: [StripeWebhookController],
   exports: [StripeService]
 })

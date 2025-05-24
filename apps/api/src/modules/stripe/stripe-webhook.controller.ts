@@ -12,7 +12,7 @@ import { StripeService } from './stripe.service'
 export class StripeWebhookController {
   private readonly processedEvents = new Set<string>()
 
-  constructor(private stripe: StripeService) {}
+  constructor(private readonly stripe: StripeService) {}
 
   @Post()
   @HttpCode(200)

@@ -29,6 +29,10 @@ export class StripeService {
     return this.stripe
   }
 
+  get prices() {
+    return { PRO: env.STRIPE_PRO_PRICE_ID, PREMIUM: env.STRIPE_PREMIUM_PRICE_ID }
+  }
+
   async getCustomer(customerId: string) {
     return this.stripe.customers.retrieve(customerId)
   }
