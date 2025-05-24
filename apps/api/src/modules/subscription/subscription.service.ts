@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service'
 
 export interface UpsertSubscriptionParams {
   userId: string
-  stripeSubId: string
+  stripeSubId?: string
   priceId: string
   plan: SubscriptionPlan
   status: SubscriptionStatus
@@ -24,10 +24,13 @@ export class SubscriptionService {
     return this.prisma.subscription.findFirst({ where: { userId } })
   }
 
-  async upsertSubscription({ userId, stripeSubId, priceId, plan, status, endDate }: UpsertSubscriptionParams) {
+  async upsertSubscription(
+    id: string,
+    { userId, stripeSubId = id, priceId, plan, status, endDate }: UpsertSubscriptionParams
+  ) {
     return this.prisma.subscription.upsert({
-      where: { stripeSubId },
-      update: { userId, priceId, plan, status, endDate },
+      where: { stripeSubId: id },
+      update: { userId, stripeSubId, priceId, plan, status, endDate },
       create: { userId, stripeSubId, priceId, plan, status, endDate }
     })
   }

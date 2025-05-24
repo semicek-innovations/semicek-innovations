@@ -43,13 +43,7 @@ export class StripeWebhookController {
       }
     }
 
-    switch (event.type) {
-      case 'checkout.session.completed':
-        console.log(`\n[${event.type}] 🎉 Checkout session completed\n${event.data.object.id}`)
-        break
-      default:
-        console.log(`\n[${event.type}] 🤷‍♀️ Unhandled event type`)
-    }
+    await this.stripe.handleStripeEvent(event)
 
     return { received: true }
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { SubscriptionPlan } from '@prisma/client'
+import { SubscriptionPlan, SubscriptionStatus } from '@prisma/client'
 import { env } from '@semicek-innovations/env'
 import Stripe from 'stripe'
 
@@ -93,5 +93,55 @@ export class StripeService {
 
   constructEventFromWebhook(payload: Buffer, signature: string) {
     return this.stripe.webhooks.constructEvent(payload, signature, env.STRIPE_WEBHOOK_SECRET)
+  }
+
+  async handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+    const userId = session.metadata?.userId
+    if (session.mode !== 'subscription' || !userId) return
+
+    const stripeSubId = session.subscription as string
+    const priceId = session.line_items?.[0]?.price.id ?? session.metadata?.priceId
+    const sub = await this.stripe.subscriptions.retrieve(stripeSubId)
+    const plan = this.getPlanFromPriceId(priceId)
+    const status = sub.status.toUpperCase() as SubscriptionStatus
+
+    return await this.prisma.subscription.upsert({
+      where: { stripeSubId: session.id },
+      update: { userId, stripeSubId, priceId, plan, status },
+      create: { userId, stripeSubId, priceId, plan, status }
+    })
+  }
+
+  async handleSubscriptionUpdatedOrDeleted(sub: Stripe.Subscription) {
+    const userId = sub.metadata?.userId
+    if (!userId) return
+
+    const priceId = sub.items.data[0]?.price.id
+    const plan = this.getPlanFromPriceId(priceId)
+    const status = sub.status.toUpperCase() as SubscriptionStatus
+
+    return await this.prisma.subscription.update({
+      where: { stripeSubId: sub.id },
+      data: { userId, priceId, plan, status }
+    })
+  }
+
+  async handleStripeEvent(event: Stripe.Event) {
+    switch (event.type) {
+      case 'checkout.session.completed':
+        console.log(`\n[${event.type}] 🎉 Checkout session completed\n${event.data.object.id}`)
+        return this.handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session)
+
+      case 'customer.subscription.updated':
+        console.log(`\n[${event.type}] 🔄 Subscription updated\n${event.data.object.id}`)
+        return this.handleSubscriptionUpdatedOrDeleted(event.data.object as Stripe.Subscription)
+
+      case 'customer.subscription.deleted':
+        console.log(`\n[${event.type}] ❌ Subscription cancelled\n${event.data.object.id}`)
+        return this.handleSubscriptionUpdatedOrDeleted(event.data.object as Stripe.Subscription)
+
+      default:
+        console.log(`[${event.type}] 🤷‍♀️ Unhandled event type`)
+    }
   }
 }
