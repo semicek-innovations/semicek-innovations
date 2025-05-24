@@ -48,7 +48,8 @@ export class StripeService {
     return customer.id
   }
 
-  async createCustomerPortalSession(customerId: string, returnUrl: string) {
+  async createCustomerPortalSession(userId: string, returnUrl: string) {
+    const customerId = await this.createCustomerIfMissing(userId)
     return this.stripe.billingPortal.sessions.create({ customer: customerId, return_url: returnUrl })
   }
 
